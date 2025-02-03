@@ -12,7 +12,7 @@ import { useEffect, useRef } from "react";
 const RobotModel = (props) => {
   const group = useRef();
   const { nodes, materials, animations } = useGLTF(
-    "/public/models/robot_playground.glb"
+    "/models/robot_playground.glb"
   );
 
   // const RobotTexture = useTexture("/textures/desk/me.jpg");
@@ -1065,5 +1065,5 @@ const RobotModel = (props) => {
     </group>
   );
 };
-useGLTF.preload("/public/models/robot_playground.glb");
+useGLTF.preload("/models/robot_playground.glb");
 export default RobotModel;

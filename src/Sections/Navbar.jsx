@@ -30,7 +30,7 @@ const Navbar = () => {
             className="text-neutral-400 font-bold text-3xl hover:text-white transition-colors flex items-center"
           >
             <img
-              src="/public/Untitled design.png"
+              src="/Untitled design.png"
               height={20}
               width={80}
               className="object-contain"
