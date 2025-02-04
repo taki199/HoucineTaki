@@ -2,6 +2,7 @@ import { PerspectiveCamera } from "@react-three/drei"; // Import OrbitControls
 import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
 import { useMediaQuery } from "react-responsive";
+import Button from "../components/Button";
 import CanvasLoader from "../components/CanvasLoader";
 import Cube from "../components/Cube";
 import HeroCamera from "../components/HeroCamera";
@@ -68,6 +69,15 @@ const Hero = () => {
             /> */}
           </Suspense>
         </Canvas>
+      </div>
+      <div className="absolute bottom-7 left-0 right-0 w-full z-10 c-space">
+        <a href="#contact" className="w-fit">
+          <Button
+            name="Let's Build Something Cool ⚡"
+            isBeam
+            containerClass="sm:w-fit w-full sm:min-w-96 bg-gradient-to-r from-slate-500 to-slate-900 text-white font-bold py-3 px-6 rounded-full shadow-lg hover:scale-105 transition-transform duration-300"
+          />
+        </a>
       </div>
     </section>
   );

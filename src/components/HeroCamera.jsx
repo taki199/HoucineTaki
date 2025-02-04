@@ -17,7 +17,11 @@ const HeroCamera = ({ children, isMobile }) => {
     }
   });
 
-  return <group ref={groupRef}>{children}</group>;
+  return (
+    <group scale={1} ref={groupRef}>
+      {children}
+    </group>
+  );
 };
 
 export default HeroCamera;
