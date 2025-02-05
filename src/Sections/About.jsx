@@ -59,7 +59,7 @@ const About = () => {
               className="w-full sm:h-[276px] h-fit object-contain"
             />
             <div>
-              <p className="grid-headtext">Hi,I'm Houcine</p>
+              <p className="grid-headtext">Hi,Im Houcine</p>
               <p className="grid-subtext">
                 Passionate full-stack developer specializing in MERN, React, and
                 Next.js. Currently diving into 3D magic with Three.js 🎨 and
@@ -86,11 +86,11 @@ const About = () => {
           </div>
         </div>
         <div className="col-span-1 xl:row-span-4">
-          <div className="grid-container">
+          <div className="w-full h-full  bg-black rounded-lg sm:p-7 p-4 flex flex-col gap-5">
             <div className="rounded-3xl w-full sm:h-[326px] h-fit flex justify-center items-center">
               <Globe
                 ref={globeEl}
-                height={326}
+                height={426}
                 width={326}
                 backgroundColor="rgba(0,0,0,0)"
                 backgroundImageOpacity={0.5}

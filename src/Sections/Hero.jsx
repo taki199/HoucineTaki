@@ -29,7 +29,7 @@ const Hero = () => {
           Transforming ideas into interactive realities
         </p>
       </div>
-      <div className="w-full h-full absolute inset-0">
+      <div className="w-full h-full absolute inset-0 mb-6">
         <Canvas>
           <Suspense fallback={<CanvasLoader />}>
             {/* Camera */}
