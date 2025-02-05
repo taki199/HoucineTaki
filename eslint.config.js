@@ -31,6 +31,7 @@ export default [
       "treact/no-unescaped-entities": "off",
       "react/jsx-no-target-blank": "off",
       "react/prop-types": "off",
+      "no-undef": "off",
       "react/no-unknown-property": [
         "error",
         {
