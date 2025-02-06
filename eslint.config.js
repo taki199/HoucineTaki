@@ -50,6 +50,7 @@ export default [
             "toneMapped",
             "args",
             "MeshMatcapMaterial",
+            "map",
           ], // Allow `position` and `geometry`
         },
       ],
