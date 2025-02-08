@@ -1,14 +1,14 @@
-import { PerspectiveCamera } from "@react-three/drei"; // Import OrbitControls
+import { OrbitControls, PerspectiveCamera } from "@react-three/drei"; // Import OrbitControls
 import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
 import { useMediaQuery } from "react-responsive";
 import Button from "../components/Button";
 import CanvasLoader from "../components/CanvasLoader";
 import Cube from "../components/Cube";
-import HeroCamera from "../components/HeroCamera";
+import FliyingAstronaut from "../components/FliyingAstronaut";
 import ReactLogo from "../components/ReactLogo";
 import Rings from "../components/Ring";
-import RobotModel from "../components/RobotModel";
+import SpaceTravel from "../components/SpaceTravel";
 import Target from "../components/Target";
 import { calculateSizes } from "../constants/index";
 
@@ -19,30 +19,44 @@ const Hero = () => {
 
   const sizes = calculateSizes(isSmall, isMobile, isTablet);
   return (
-    <section className="min-h-screen w-full flex flex-col relative">
+    <section className="min-h-screen w-full flex flex-col relative z">
       <div className="w-full mx-auto flex flex-col sm:mt-36 mt-20 c-space gap-3">
-        <p className="sm:tex-3xl text-2xl font-medium text-white text-center font-generalsans">
+        <p className="sm:tex-3xl text-2xl font-medium text-white text-center font-generalsans z-10">
           Hi,I am <span className="text-3xl font-extrabold ">H</span>oucine{" "}
           <span className="waving-hand">👋</span>{" "}
         </p>
-        <p className="hero_tag text-gray_gradient">
+        <p className="hero_tag text-gray_gradient z-10">
           Transforming ideas into interactive realities
         </p>
       </div>
       <div className="w-full h-full absolute inset-0 mb-6">
         <Canvas>
           <Suspense fallback={<CanvasLoader />}>
+            <OrbitControls />
             {/* Camera */}
             <PerspectiveCamera makeDefault position={[0, 0, 28]} />
 
+            {/* <StarryNight
+              position={[0, -10, 1]} // Adjust position to place it behind the robot
+              scale={1.5}
+            /> */}
+
+            <SpaceTravel
+              position={[35, 1, -20]} // This is relative to the parent
+              scale={[1, 1, 0.7]}
+              rotation={[0, Math.PI / 2, -4]}
+            />
             {/* Robot Model */}
-            <HeroCamera isMobile={isMobile}>
+            {/* <Status scale={2.5} position={[0, -9, 2]} rotation={[0, 0, 0]} /> */}
+            {/* <HeroCamera isMobile={isMobile}>
               <RobotModel
                 scale={sizes.deskScale}
                 position={[0, -9, 2]}
                 rotation={[0, 0, 0]}
               />
-            </HeroCamera>
+            </HeroCamera> */}
+
+            <FliyingAstronaut scale={4} position={[0, -10, 0]} />
 
             <group>
               <Target
@@ -57,7 +71,7 @@ const Hero = () => {
 
             {/* Lights */}
             <ambientLight intensity={1} />
-            <directionalLight position={[10, 10, 10]} intensity={0.5} />
+            <directionalLight position={[10, 10, 10]} intensity={3} />
 
             {/* OrbitControls */}
             {/* <OrbitControls
@@ -71,7 +85,7 @@ const Hero = () => {
         </Canvas>
       </div>
       <div className="absolute bottom-7 left-0 right-0 w-full z-10 c-space">
-        <a href="#contact" className="w-fit">
+        <a href="#about" className="w-fit">
           <Button
             name="Let's Build Something Cool ⚡"
             isBeam

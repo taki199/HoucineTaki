@@ -255,29 +255,29 @@ export const calculateSizes = (isSmall, isMobile, isTablet) => {
       : isMobile
       ? [5, -5, 0]
       : isTablet
-      ? [5, -5, 0]
-      : [14, -5.5, 0],
+      ? [8, -5, 0]
+      : [20, -5.5, 0],
     reactLogoPosition: isSmall
       ? [3, 4, 0]
       : isMobile
       ? [5, 4, 0]
       : isTablet
       ? [5, 4, 0]
-      : [12, 3, 0],
+      : [20, 3, 0],
     ringPosition: isSmall
       ? [-5, 7, 0]
       : isMobile
       ? [-10, 10, 0]
       : isTablet
       ? [-12, 8, 0]
-      : [-24, 8, 0],
+      : [-32, 8, 0],
     targetPosition: isSmall
       ? [-5, -10, -10]
       : isMobile
       ? [-9, -10, -10]
       : isTablet
       ? [-11, -7, -10]
-      : [-13, -13, -10],
+      : [-15, -13, -10],
   };
 };
 

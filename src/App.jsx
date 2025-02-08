@@ -5,11 +5,13 @@ import Projects from "./Sections/Projects";
 
 const App = () => {
   return (
-    <main className="max-w-7xl mx-auto">
+    <main>
       <Navbar />
       <Hero />
-      <About />
-      <Projects />
+      <div className="max-w-7xl mx-auto">
+        <About />
+        <Projects />
+      </div>
     </main>
   );
 };
