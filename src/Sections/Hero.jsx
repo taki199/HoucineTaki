@@ -32,7 +32,7 @@ const Hero = () => {
       <div className="w-full h-full absolute inset-0 mb-6">
         <Canvas>
           <Suspense fallback={<CanvasLoader />}>
-            <OrbitControls />
+            <OrbitControls enableZoom={false} />
             {/* Camera */}
             <PerspectiveCamera makeDefault position={[0, 0, 28]} />
 
