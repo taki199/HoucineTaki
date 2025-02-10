@@ -1,3 +1,4 @@
+import emailjs from "@emailjs/browser";
 import { useRef, useState } from "react";
 
 const Contact = () => {
@@ -8,8 +9,40 @@ const Contact = () => {
     email: "",
     message: "",
   });
-  const HandleChange = () => {};
-  const handleSubmit = () => {};
+  const HandleChange = ({ target: { name, value } }) => {
+    setForm({ ...form, [name]: value });
+  };
+  //service_ltv4drg
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    setLoading(true);
+    try {
+      await emailjs.send(
+        "service_ltv4drg",
+        "template_qve7m3y",
+        {
+          from_name: form.name,
+          to_name: "Houcine",
+          from_email: form.email,
+          to_email: "houcine.taki21@gmail.com",
+          message: form.message,
+        },
+        "V3JqFUGjFXvmoSJBc"
+      );
+      setLoading(false);
+      alert("Your message has been sent!");
+      setForm({
+        name: "",
+        email: "",
+        message: "",
+      });
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+      alert("something went wrong");
+    }
+  };
   return (
     <section className="c-space my-20">
       <div className="relative min-h-screen flex items-center justify-center flex-col">
