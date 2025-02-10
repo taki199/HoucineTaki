@@ -3,10 +3,10 @@ import { navLinks } from "../constants";
 
 const NavItems = () => {
   return (
-    <ul className="nav-ul">
+    <ul className="nav-ul space-theme">
       {navLinks.map(({ id, href, name }) => (
         <li key={id} className="nav-li">
-          <a href={href} className="nav-li_a" onClick={() => {}}>
+          <a href={href} className="nav-li_a hover:glow" onClick={() => {}}>
             {name}
           </a>
         </li>
@@ -21,14 +21,14 @@ const Navbar = () => {
   const toggleMenu = () => {
     SetIsOpen((prev) => !prev);
   };
-  // bg-black/90
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-transparent">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-transparent ">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center py-5 mx-auto c-space">
           <a
             href="/"
-            className="text-neutral-400 font-bold text-3xl hover:text-white transition-colors flex items-center"
+            className="text-neutral-400 font-bold text-3xl hover:text-white transition-colors flex items-center space-logo"
           >
             <img
               src="/Untitled design.png"
@@ -55,7 +55,11 @@ const Navbar = () => {
           </nav>
         </div>
       </div>
-      <div className={`nav-sidebar ${isOpen ? "max-h-screen" : "max-h-0"}`}>
+      <div
+        className={`nav-sidebar space-theme ${
+          isOpen ? "max-h-screen" : "max-h-0"
+        }`}
+      >
         <nav className="p-5">
           <NavItems />
         </nav>

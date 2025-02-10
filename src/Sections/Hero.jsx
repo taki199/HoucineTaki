@@ -32,7 +32,9 @@ const Hero = () => {
       <div className="w-full h-full absolute inset-0 mb-6">
         <Canvas>
           <Suspense fallback={<CanvasLoader />}>
+            {/* <CameraAnimation /> */}
             <OrbitControls enableZoom={false} />
+
             {/* Camera */}
             <PerspectiveCamera makeDefault position={[0, 0, 28]} />
 
@@ -57,6 +59,7 @@ const Hero = () => {
             </HeroCamera> */}
 
             <FliyingAstronaut scale={4} position={[0, -10, 0]} />
+            {/* <Astronaut position={[-17, 11, 0]} /> */}
 
             <group>
               <Target
