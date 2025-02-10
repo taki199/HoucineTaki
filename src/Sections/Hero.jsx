@@ -1,8 +1,9 @@
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei"; // Import OrbitControls
 import { Canvas } from "@react-three/fiber";
-import { Suspense } from "react";
+import { Suspense, useRef } from "react";
 import { useMediaQuery } from "react-responsive";
 import Button from "../components/Button";
+import CameraAnimation from "../components/CameraAnimation";
 import CanvasLoader from "../components/CanvasLoader";
 import Cube from "../components/Cube";
 import FliyingAstronaut from "../components/FliyingAstronaut";
@@ -18,6 +19,8 @@ const Hero = () => {
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1024 });
 
   const sizes = calculateSizes(isSmall, isMobile, isTablet);
+  const orbitControlsRef = useRef(); // Define the ref here
+
   return (
     <section className="min-h-screen w-full flex flex-col relative z" id="home">
       <div className="w-full mx-auto flex flex-col sm:mt-36 mt-20 c-space gap-3">
@@ -28,39 +31,41 @@ const Hero = () => {
         <p className="hero_tag text-gray_gradient z-10">
           Transforming ideas into interactive realities
         </p>
-      </div>
-      <div className="w-full h-full absolute inset-0 mb-6">
-        <Canvas>
-          <Suspense fallback={<CanvasLoader />}>
-            {/* <CameraAnimation /> */}
-            <OrbitControls enableZoom={false} />
-
-            {/* Camera */}
-            <PerspectiveCamera makeDefault position={[0, 0, 28]} />
-
-            {/* <StarryNight
-              position={[0, -10, 1]} // Adjust position to place it behind the robot
-              scale={1.5}
-            /> */}
-
-            <SpaceTravel
-              position={[35, 1, -20]} // This is relative to the parent
-              scale={[1, 1, 0.7]}
-              rotation={[0, Math.PI / 2, -4]}
-            />
-            {/* Robot Model */}
-            {/* <Status scale={2.5} position={[0, -9, 2]} rotation={[0, 0, 0]} /> */}
-            {/* <HeroCamera isMobile={isMobile}>
+        {/* Robot Model */}
+        {/* <Status scale={2.5} position={[0, -9, 2]} rotation={[0, 0, 0]} /> */}
+        {/* <HeroCamera isMobile={isMobile}>
               <RobotModel
                 scale={sizes.deskScale}
                 position={[0, -9, 2]}
                 rotation={[0, 0, 0]}
               />
             </HeroCamera> */}
+      </div>
+      <div className="w-full h-full absolute inset-0 mb-6">
+        <Canvas>
+          <Suspense fallback={<CanvasLoader />}>
+            <CameraAnimation orbitControlsRef={orbitControlsRef} />
 
+            {/* Use OrbitControls as the default controller */}
+            <OrbitControls
+              ref={orbitControlsRef} // Pass the ref to OrbitControls
+              makeDefault // Make OrbitControls the default controller
+              enablePan={true}
+              enableZoom={true}
+              enableRotate={true}
+              minDistance={5}
+              maxDistance={100}
+              enabled={false} // Disable controls initially
+            />
+            <PerspectiveCamera makeDefault position={[0, 0, 28]} />
+
+            {/* Models */}
+            <SpaceTravel
+              position={[35, 1, -20]}
+              scale={[1, 1, 0.7]}
+              rotation={[0, Math.PI / 2, -4]}
+            />
             <FliyingAstronaut scale={4} position={[0, -10, 0]} />
-            {/* <Astronaut position={[-17, 11, 0]} /> */}
-
             <group>
               <Target
                 scale={1.5}
@@ -77,13 +82,6 @@ const Hero = () => {
             <directionalLight position={[10, 10, 10]} intensity={3} />
 
             {/* OrbitControls */}
-            {/* <OrbitControls
-              enablePan={true} 
-              enableZoom={false} 
-              enableRotate={true} 
-              minDistance={5} 
-              maxDistance={50} 
-            /> */}
           </Suspense>
         </Canvas>
       </div>

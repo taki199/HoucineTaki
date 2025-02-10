@@ -2,65 +2,48 @@ import { useThree } from "@react-three/fiber";
 import { gsap } from "gsap";
 import { useEffect } from "react";
 
-const CameraAnimation = () => {
+const CameraAnimation = ({ orbitControlsRef }) => {
   const { camera } = useThree();
 
   useEffect(() => {
-    // Save the camera's initial position and rotation
+    // Save the camera's initial position (default position)
     const initialPosition = {
-      x: camera.position.x,
-      y: camera.position.y,
-      z: camera.position.z,
+      x: 0, // Default X position (center of the scene)
+      y: 0, // Default Y position (center of the scene)
+      z: 28, // Default Z position (front of the scene)
     };
-    const initialRotation = {
-      x: camera.rotation.x,
-      y: camera.rotation.y,
-      z: camera.rotation.z,
-    };
+
+    // Set the camera's starting position (viewing from far away)
+    camera.position.set(100, 50, -100); // Move the camera far away
+    camera.lookAt(0, 0, 0); // Make the camera look at the center of the scene
+    camera.updateProjectionMatrix(); // Update the camera's projection matrix
 
     // Animation timeline
-    const timeline = gsap.timeline({ repeat: -1, repeatDelay: 1 }); // Loop forever with a 1-second delay between loops
+    const timeline = gsap.timeline();
 
-    // Step 1: Zoom out and move behind the scene
-    timeline.to(camera.position, {
-      x: initialPosition.x, // Keep X position the same
-      y: initialPosition.y, // Keep Y position the same
-      z: initialPosition.z + 20, // Move the camera further back (zoom out)
-      duration: 5, // Animation duration in seconds
-      ease: "power2.inOut", // Smooth easing
-    });
-
-    // Step 2: Rotate the camera to look behind the scene
+    // Step 1: Move the camera to the default position (front of the scene)
     timeline.to(
-      camera.rotation,
+      camera.position,
       {
-        y: Math.PI, // Rotate 180 degrees (in radians)
-        duration: 5, // Animation duration in seconds
+        x: initialPosition.x, // Move to the center of the scene
+        y: initialPosition.y, // Move to the center of the scene
+        z: initialPosition.z, // Move to the front of the scene
+        duration: 10, // Animation duration in seconds
         ease: "power2.inOut", // Smooth easing
+        onUpdate: () => {
+          camera.lookAt(0, 0, 0); // Keep the camera looking at the center of the scene
+          camera.updateProjectionMatrix(); // Update the camera's projection matrix during the animation
+        },
+        onComplete: () => {
+          // Enable OrbitControls after the animation ends
+          if (orbitControlsRef.current) {
+            orbitControlsRef.current.enabled = true;
+          }
+        },
       },
-      "<"
-    ); // Start this animation at the same time as the previous one
-
-    // Step 3: Move the camera back to its original position
-    timeline.to(camera.position, {
-      x: initialPosition.x, // Return to initial X position
-      y: initialPosition.y, // Return to initial Y position
-      z: initialPosition.z, // Return to initial Z position
-      duration: 5, // Animation duration in seconds
-      ease: "power2.inOut", // Smooth easing
-    });
-
-    // Step 4: Rotate the camera back to its original rotation
-    timeline.to(
-      camera.rotation,
-      {
-        y: initialRotation.y, // Return to initial Y rotation
-        duration: 5, // Animation duration in seconds
-        ease: "power2.inOut", // Smooth easing
-      },
-      "<"
-    ); // Start this animation at the same time as the previous one
-  }, [camera]);
+      "0" // Start the animation immediately
+    );
+  }, [camera, orbitControlsRef]);
 
   return null;
 };
