@@ -19,7 +19,7 @@ const Hero = () => {
 
   const sizes = calculateSizes(isSmall, isMobile, isTablet);
   return (
-    <section className="min-h-screen w-full flex flex-col relative z">
+    <section className="min-h-screen w-full flex flex-col relative z" id="home">
       <div className="w-full mx-auto flex flex-col sm:mt-36 mt-20 c-space gap-3">
         <p className="sm:tex-3xl text-2xl font-medium text-white text-center font-generalsans z-10">
           Hi,I am <span className="text-3xl font-extrabold ">H</span>oucine{" "}
