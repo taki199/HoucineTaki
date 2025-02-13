@@ -1,5 +1,7 @@
+import { useGSAP } from "@gsap/react";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei"; // Import OrbitControls
 import { Canvas } from "@react-three/fiber";
+import gsap from "gsap";
 import { Suspense, useRef } from "react";
 import { useMediaQuery } from "react-responsive";
 import Button from "../components/Button";
@@ -17,13 +19,47 @@ const Hero = () => {
   const isSmall = useMediaQuery({ maxWidth: 480 });
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1024 });
+  const hero = useRef(null);
+  const btnRef = useRef(null);
+
+  useGSAP(() => {
+    // Initial state: Hide the block and move it above the viewport
+    gsap.set(hero.current, { y: -100, opacity: 0 });
+
+    // Animation: Wait for 10 seconds, then animate the block to its original position
+    gsap.to(hero.current, {
+      y: 0, // Move to original Y position
+      opacity: 1, // Fade in
+      duration: 1, // Animation duration
+      delay: 10, // Wait for 10 seconds before starting
+      ease: "power2.out", // Smooth easing
+      zIndex: 10, // Use zIndex instead of z
+    });
+  }, []);
+  useGSAP(() => {
+    // Initial state: Hide the block and move it above the viewport
+    gsap.set(btnRef.current, { y: -100, opacity: 0 });
+
+    // Animation: Wait for 10 seconds, then animate the block to its original position
+    gsap.to(btnRef.current, {
+      y: 0, // Move to original Y position
+      opacity: 1, // Fade in
+      duration: 1, // Animation duration
+      delay: 10, // Wait for 10 seconds before starting
+      ease: "power2.out", // Smooth easing
+      zIndex: 10, // Use zIndex instead of z
+    });
+  }, []);
 
   const sizes = calculateSizes(isSmall, isMobile, isTablet);
   const orbitControlsRef = useRef(); // Define the ref here
 
   return (
     <section className="min-h-screen w-full flex flex-col relative z" id="home">
-      <div className="w-full mx-auto flex flex-col sm:mt-36 mt-20 c-space gap-3">
+      <div
+        className="w-full mx-auto flex flex-col sm:mt-36 mt-20 c-space gap-3"
+        ref={hero}
+      >
         <p className="sm:tex-3xl text-2xl font-medium text-white text-center font-generalsans z-10">
           Hi,I am <span className="text-3xl font-extrabold ">H</span>oucine{" "}
           <span className="waving-hand">👋</span>{" "}
@@ -51,7 +87,7 @@ const Hero = () => {
               ref={orbitControlsRef} // Pass the ref to OrbitControls
               makeDefault // Make OrbitControls the default controller
               enablePan={true}
-              enableZoom={true}
+              enableZoom={false}
               enableRotate={true}
               minDistance={5}
               maxDistance={100}
@@ -85,7 +121,10 @@ const Hero = () => {
           </Suspense>
         </Canvas>
       </div>
-      <div className="absolute bottom-7 left-0 right-0 w-full z-10 c-space">
+      <div
+        className="absolute bottom-7 left-0 right-0 w-full z-10 c-space"
+        ref={btnRef}
+      >
         <a href="#about" className="w-fit">
           <Button
             name="Let's Build Something Cool ⚡"

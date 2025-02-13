@@ -1,6 +1,8 @@
 import { Center, OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { Suspense, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Suspense, useEffect, useRef, useState } from "react";
 import CanvasLoader from "../components/CanvasLoader";
 import DemoComputer from "../components/DemoComputer";
 import { myProjects } from "../constants";
@@ -10,6 +12,31 @@ const projectCount = myProjects.length;
 const Projects = () => {
   const [selectdProjectIndex, setSelectedProjectIndex] = useState(0);
   const currentProject = myProjects[selectdProjectIndex];
+  gsap.registerPlugin(ScrollTrigger);
+  const projectRef = useRef(null);
+  useEffect(() => {
+    const element = projectRef.current;
+    if (!element) return;
+
+    // GSAP animation
+    const animation = gsap.fromTo(
+      element,
+      { opacity: 0, y: 100 }, // Start state
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1.5,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: element,
+          start: "top 80%", // Start when the top of the section reaches 80% of the viewport
+          end: "top 30%", // End animation when it reaches 30%
+          toggleActions: "play none none reverse", // Play on enter, reverse on leave
+        },
+      }
+    );
+    return () => animation.kill(); // Cleanup on unmount
+  }, []);
   const handleNavigation = (direction) => {
     setSelectedProjectIndex((prevIndex) => {
       if (direction === "previous") {
@@ -20,7 +47,7 @@ const Projects = () => {
     });
   };
   return (
-    <section className="c-space my-20" id="work">
+    <section className="c-space my-20" id="work" ref={projectRef}>
       <p className="head-text">My Work</p>
       <div className="grid lg:grid-cols-2 grid-cols-1 mt-12 gap-5 w-full">
         <div className="flex flex-col gap-5 relative sm:p-10 py-10 px-5 shadow-2xl shadow-black-200">

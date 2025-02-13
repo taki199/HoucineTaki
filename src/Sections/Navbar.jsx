@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { useRef, useState } from "react";
 import { navLinks } from "../constants";
 
 const NavItems = () => {
@@ -17,13 +19,30 @@ const NavItems = () => {
 
 const Navbar = () => {
   const [isOpen, SetIsOpen] = useState(false);
+  const navRef = useRef(null);
+  useGSAP(() => {
+    // Initial state: Hide the block and move it above the viewport
+    gsap.set(navRef.current, { y: -100, opacity: 0 });
 
+    // Animation: Wait for 10 seconds, then animate the block to its original position
+    gsap.to(navRef.current, {
+      y: 0, // Move to original Y position
+      opacity: 1, // Fade in
+      duration: 1, // Animation duration
+      delay: 10, // Wait for 10 seconds before starting
+      ease: "power2.out", // Smooth easing
+      zIndex: 10, // Use zIndex instead of z
+    });
+  }, []);
   const toggleMenu = () => {
     SetIsOpen((prev) => !prev);
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-transparent  ">
+    <header
+      className="fixed top-0 left-0 right-0 z-50 bg-transparent  "
+      ref={navRef}
+    >
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center py-5 mx-auto c-space">
           <a

@@ -1,3 +1,5 @@
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef, useState } from "react";
 import Globe from "react-globe.gl";
 import * as THREE from "three";
@@ -6,6 +8,32 @@ import Button from "../components/Button";
 const About = () => {
   const globeEl = useRef();
   const [hasCopied, setHasCopied] = useState(false);
+  gsap.registerPlugin(ScrollTrigger);
+
+  const aboutRef = useRef(null);
+  useEffect(() => {
+    const element = aboutRef.current;
+    if (!element) return;
+
+    // GSAP animation
+    const animation = gsap.fromTo(
+      element,
+      { opacity: 0, y: 100 }, // Start state
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1.5,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: element,
+          start: "top 80%", // Start when the top of the section reaches 80% of the viewport
+          end: "top 30%", // End animation when it reaches 30%
+          toggleActions: "play none none reverse", // Play on enter, reverse on leave
+        },
+      }
+    );
+    return () => animation.kill(); // Cleanup on unmount
+  }, []);
 
   const handleCopy = () => {
     navigator.clipboard.writeText("houcine.taki21@gmail.com").then(() => {
@@ -49,7 +77,7 @@ const About = () => {
     });
   }, []);
   return (
-    <section className="c-space my-20" id="about">
+    <section className="c-space my-20" id="about" ref={aboutRef}>
       <div className="grid xl:grid-cols-3 xl:grid-rows-6 md:grid-cols-2 grid-cols-1 gap-5 h-full">
         <div className="col-span-1 xl:row-span-3">
           <div className="grid-container">

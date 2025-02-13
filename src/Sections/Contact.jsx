@@ -1,8 +1,36 @@
 import emailjs from "@emailjs/browser";
-import { useRef, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect, useRef, useState } from "react";
 
 const Contact = () => {
   const formRef = useRef();
+
+  gsap.registerPlugin(ScrollTrigger);
+  const contactRef = useRef(null);
+  useEffect(() => {
+    const element = contactRef.current;
+    if (!element) return;
+
+    // GSAP animation
+    const animation = gsap.fromTo(
+      element,
+      { opacity: 0, y: 100 }, // Start state
+      {
+        opacity: 1,
+        y: 0,
+        duration: 2,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: element,
+          start: "top 80%", // Start when the top of the section reaches 80% of the viewport
+          end: "top 30%", // End animation when it reaches 30%
+          toggleActions: "play none none reverse", // Play on enter, reverse on leave
+        },
+      }
+    );
+    return () => animation.kill(); // Cleanup on unmount
+  }, []);
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     name: "",
@@ -44,7 +72,7 @@ const Contact = () => {
     }
   };
   return (
-    <section className="c-space my-20" id="contact">
+    <section className="c-space my-20" id="contact" ref={contactRef}>
       <div className="relative min-h-screen flex items-center justify-center flex-col">
         <img
           src="/assets/terminal.png"
