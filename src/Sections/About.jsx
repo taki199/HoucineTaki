@@ -114,7 +114,7 @@ const About = () => {
           </div>
         </div>
         <div className="col-span-1 xl:row-span-4">
-          <div className="w-full h-full  bg-black rounded-lg sm:p-7 p-4 flex flex-col gap-5">
+          <div className="w-full h-full   rounded-lg sm:p-7 p-4 flex flex-col gap-5">
             <div className="rounded-3xl w-full sm:h-[326px] h-fit flex justify-center items-center">
               <Globe
                 ref={globeEl}
@@ -124,15 +124,15 @@ const About = () => {
                 backgroundImageOpacity={0.5}
                 showAtmosphere
                 showGraticules
-                // labelsData={[
-                //   {
-                //     lat: 33.589886,
-                //     lng: -7.603869,
-                //     text: "I'm here!",
-                //     color: "white",
-                //     size: 700,
-                //   },
-                // ]}
+                labelsData={[
+                  {
+                    lat: 33.589886,
+                    lng: -7.603869,
+                    text: "I'm here!",
+                    color: "white",
+                    size: 10000,
+                  },
+                ]}
                 globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
                 bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
               />

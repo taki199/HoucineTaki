@@ -6,14 +6,14 @@ Source: https://sketchfab.com/3d-models/blackhole-74cbeaeae2174a218fe9455d77902b
 Title: Blackhole
 */
 
-import { useAnimations, useGLTF } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 import { useRef } from "react";
 
 const BlackHole = (props) => {
   const group = useRef();
   const { nodes, materials, animations } = useGLTF("/models/blackhole.glb");
   console.log(animations);
-  const { actions } = useAnimations(animations, group);
+  // const { actions } = useAnimations(animations, group);
 
   return (
     <group ref={group} {...props} dispose={null}>

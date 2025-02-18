@@ -16,6 +16,15 @@ body {
 header {
   background: transparent;
 }
+main {
+  position: relative;
+  width: 100%;
+}
+
+.max-w-7xl {
+  position: relative;
+  z-index: 10; /* Ensure content stays above the background */
+}
 
 /* Glowing effect on hover */
 .hover\:glow:hover {
@@ -215,7 +224,13 @@ button {
     @apply w-12 h-12 rounded-full flex justify-center items-center bg-black-300 border border-black-200;
   }
 }
-
+.background-image {
+  background-image: url("/assets/spaceBg.png"); /* Replace with your image path */
+  background-size: cover; /* Cover the entire area */
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-attachment: fixed; /* Optional: Fix the background while scrolling */
+}
 .waving-hand {
   animation-name: wave-animation;
   animation-duration: 2.5s;

@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from "react";
+import SpaceBackground from "./components/SpaceBackground";
 import About from "./Sections/About";
 import Contact from "./Sections/Contact";
 import Footer from "./Sections/Footer";
@@ -6,11 +8,27 @@ import Navbar from "./Sections/Navbar";
 import Projects from "./Sections/Projects";
 
 const App = () => {
+  const contentRef = useRef(null);
+  const [contentHeight, setContentHeight] = useState(0);
+
+  useEffect(() => {
+    if (contentRef.current) {
+      // Calculate the total height of the content sections
+      const height = contentRef.current.clientHeight;
+      setContentHeight(height);
+    }
+  }, []);
+
   return (
-    <main>
+    <main style={{ position: "relative" }}>
       <Navbar />
       <Hero />
-      <div className="max-w-7xl mx-auto">
+
+      {/* SpaceBackground starts below the Hero section */}
+      <SpaceBackground contentHeight={contentHeight} />
+
+      {/* Content sections */}
+      <div ref={contentRef} className="max-w-7xl mx-auto relative z-10">
         <About />
         <Projects />
         <Contact />
