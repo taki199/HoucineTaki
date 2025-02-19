@@ -29,12 +29,13 @@ const App = () => {
       <SpaceBackground contentHeight={contentHeight} />
 
       {/* Content sections */}
-      <div ref={contentRef} className="max-w-7xl mx-auto relative z-10">
+      <div ref={contentRef} className="max-w-7xl mx-auto relative  z-0 ">
         <About />
         <Projects />
-        <Contact />
         <RealTerminal />
 
+        <Contact />
+        {/* <SpaceshipGame /> */}
         <Footer />
       </div>
     </main>

@@ -40,7 +40,7 @@ const Navbar = () => {
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-50 bg-transparent  "
+      className="fixed top-0 left-0 right-0 z-50 bg-transparent"
       ref={navRef}
     >
       <div className="max-w-7xl mx-auto">
