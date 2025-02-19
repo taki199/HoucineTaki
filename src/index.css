@@ -4,6 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.xterm-viewport {
+  overflow-y: hidden !important;
+  border-radius: 0 0 0.5rem 0.5rem;
+}
 * {
   scroll-behavior: smooth;
 }

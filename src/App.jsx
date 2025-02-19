@@ -6,6 +6,7 @@ import Footer from "./Sections/Footer";
 import Hero from "./Sections/Hero";
 import Navbar from "./Sections/Navbar";
 import Projects from "./Sections/Projects";
+import RealTerminal from "./Sections/Terminal";
 
 const App = () => {
   const contentRef = useRef(null);
@@ -32,6 +33,8 @@ const App = () => {
         <About />
         <Projects />
         <Contact />
+        <RealTerminal />
+
         <Footer />
       </div>
     </main>
