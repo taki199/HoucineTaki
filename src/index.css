@@ -24,6 +24,58 @@ main {
   position: relative;
   width: 100%;
 }
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-family: sans-serif;
+  padding: 10px; /* Reduce padding */
+  font-weight: bold;
+  min-height: auto; /* Prevent unnecessary height */
+}
+
+.scrolling-container {
+  width: 100%;
+  overflow: hidden;
+  padding: 10px 0; /* Reduce padding to minimize spacing */
+}
+
+.scrolling-text {
+  display: flex;
+  white-space: nowrap;
+  animation: scroll 30s linear infinite;
+}
+
+.left-to-right {
+  animation-direction: normal;
+}
+
+.right-to-left {
+  animation-direction: reverse;
+}
+
+.tech-item {
+  font-size: 1.5rem;
+  margin: 0 20px;
+  color: #ddd;
+  text-shadow: 2px 2px 2px #000, 3px 3px 5px #000; /* 3D text effect */
+  transition: transform 0.3s ease;
+}
+
+.tech-item:hover {
+  transform: scale(1.1); /* Slightly scale up on hover */
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
 
 .max-w-7xl {
   position: relative;
