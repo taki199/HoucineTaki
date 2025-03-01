@@ -11,8 +11,8 @@ const WhatIdo = () => {
   return (
     <div className="w-full h-full flex flex-wrap bg-transparent text-white">
       {/* Left Section: Content */}
-      <div className="w-1/2 p-10">
-        <h1 className="hero_tag text-gray_gradient">What I Do</h1>
+      <div className="w-1/2 pt-10">
+        <h1 className="hero_tag text-gray_gradient mr-96 mb-10 ">What I Do</h1>
 
         {/* Web Development Section */}
         <div
@@ -95,7 +95,7 @@ const WhatIdo = () => {
       </div>
 
       {/* Right Section: LetterGlitch Component */}
-      <div className="w-1/2  flex items-center justify-center">
+      <div className="w-1/2  flex items-center justify-center mt-24">
         <LetterGlitch
           glitchSpeed={50}
           centerVignette={true}

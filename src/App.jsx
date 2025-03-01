@@ -9,7 +9,7 @@ import Navbar from "./Sections/Navbar";
 import Projects from "./Sections/Projects";
 // import TechStack from "./Sections/techStack";
 import RealTerminal from "./Sections/Terminal";
-import WhatIdo from "./Sections/WhatIdo";
+// import WhatIdo from "./Sections/WhatIdo";
 // import FallingText from "./components/FallingText";
 
 const App = () => {
@@ -36,7 +36,7 @@ const App = () => {
       <div ref={contentRef} className="max-w-7xl mx-auto relative  z-0 ">
         <About />
         <Projects />
-        <WhatIdo />
+        {/* <WhatIdo /> */}
         <RealTerminal />
         {/* <FallingText
           text={`React Bits is a library of animated and interactive React components designed to streamline UI development and simplify your workflow.`}
