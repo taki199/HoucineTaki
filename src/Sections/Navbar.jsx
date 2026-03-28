@@ -20,19 +20,21 @@ const NavItems = () => {
 const Navbar = () => {
   const [isOpen, SetIsOpen] = useState(false);
   const navRef = useRef(null);
+  
   useGSAP(() => {
-    // Initial state: Hide the block and move it above the viewport
-    gsap.set(navRef.current, { y: -100, opacity: 0 });
+    if (navRef.current) {
+      // Initial state: Hide the block and move it above the viewport
+      gsap.set(navRef.current, { y: -100, opacity: 0 });
 
-    // Animation: Wait for 10 seconds, then animate the block to its original position
-    gsap.to(navRef.current, {
-      y: 0, // Move to original Y position
-      opacity: 1, // Fade in
-      duration: 1, // Animation duration
-      delay: 10, // Wait for 10 seconds before starting
-      ease: "power2.out", // Smooth easing
-      zIndex: 10, // Use zIndex instead of z
-    });
+      // Animate in immediately on mount (Navbar only mounts after Hero animation completes)
+      gsap.to(navRef.current, {
+        y: 0,
+        opacity: 1,
+        duration: 1,
+        ease: "power2.out",
+        zIndex: 10,
+      });
+    }
   }, []);
   const toggleMenu = () => {
     SetIsOpen((prev) => !prev);

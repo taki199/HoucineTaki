@@ -1,29 +1,33 @@
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 
 function Stars() {
   const starsRef = useRef();
 
   useFrame(() => {
     if (starsRef.current) {
-      starsRef.current.rotation.y += 0.0005; // Rotate the stars for a moving effect
+      starsRef.current.rotation.y += 0.0005;
     }
   });
 
-  const vertices = [];
-  for (let i = 0; i < 10000; i++) {
-    const x = (Math.random() - 0.5) * 2000;
-    const y = (Math.random() - 0.5) * 2000;
-    const z = (Math.random() - 0.5) * 2000;
-    vertices.push(x, y, z);
-  }
+  const vertices = useMemo(() => {
+    const v = [];
+    for (let i = 0; i < 10000; i++) {
+      v.push(
+        (Math.random() - 0.5) * 2000,
+        (Math.random() - 0.5) * 2000,
+        (Math.random() - 0.5) * 2000
+      );
+    }
+    return new Float32Array(v);
+  }, []);
 
   return (
     <points ref={starsRef}>
       <bufferGeometry attach="geometry">
         <bufferAttribute
           attach="attributes-position"
-          array={new Float32Array(vertices)}
+          array={vertices}
           itemSize={3}
           count={vertices.length / 3}
         />

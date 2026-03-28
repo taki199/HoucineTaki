@@ -9,10 +9,11 @@ import { myProjects } from "../constants";
 
 const projectCount = myProjects.length;
 
+gsap.registerPlugin(ScrollTrigger);
+
 const Projects = () => {
   const [selectdProjectIndex, setSelectedProjectIndex] = useState(0);
   const currentProject = myProjects[selectdProjectIndex];
-  gsap.registerPlugin(ScrollTrigger);
   const projectRef = useRef(null);
   useEffect(() => {
     const element = projectRef.current;

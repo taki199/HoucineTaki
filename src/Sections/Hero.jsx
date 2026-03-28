@@ -1,8 +1,7 @@
-import { useGSAP } from "@gsap/react";
-import { OrbitControls, PerspectiveCamera } from "@react-three/drei"; // Import OrbitControls
+import { OrbitControls, PerspectiveCamera, useProgress } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import gsap from "gsap";
-import { Suspense, useRef } from "react";
+import { Suspense, useRef, useEffect, useState, useCallback } from "react";
 import { useMediaQuery } from "react-responsive";
 import Button from "../components/Button";
 import CameraAnimation from "../components/CameraAnimation";
@@ -12,43 +11,79 @@ import FliyingAstronaut from "../components/FliyingAstronaut";
 import ReactLogo from "../components/ReactLogo";
 import Rings from "../components/Ring";
 import SpaceTravel from "../components/SpaceTravel";
-import Target from "../components/Target";
 import { calculateSizes } from "../constants/index";
 
-const Hero = () => {
+// Component to track loading progress
+const LoadingTracker = ({ onModelsLoaded }) => {
+  const { progress, active } = useProgress();
+
+  useEffect(() => {
+    if (progress === 100 && !active) {
+      onModelsLoaded();
+    }
+  }, [progress, active, onModelsLoaded]);
+
+  return null;
+};
+
+const Hero = ({ onAnimationComplete }) => {
   const isSmall = useMediaQuery({ maxWidth: 480 });
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1024 });
   const hero = useRef(null);
   const btnRef = useRef(null);
+  const [modelsLoaded, setModelsLoaded] = useState(false);
 
-  useGSAP(() => {
-    // Initial state: Hide the block and move it above the viewport
-    gsap.set(hero.current, { y: -100, opacity: 0 });
+  // Called by CameraAnimation when its timeline completes
+  const handleCameraAnimationDone = useCallback(() => {
+    // Animate hero text in
+    if (hero.current) {
+      gsap.to(hero.current, {
+        y: 0,
+        opacity: 1,
+        visibility: "visible",
+        pointerEvents: "auto",
+        duration: 1,
+        ease: "power2.out",
+        zIndex: 10,
+      });
+    }
+    // Animate button in
+    if (btnRef.current) {
+      gsap.to(btnRef.current, {
+        y: 0,
+        opacity: 1,
+        visibility: "visible",
+        pointerEvents: "auto",
+        duration: 1,
+        ease: "power2.out",
+        zIndex: 10,
+      });
+    }
+    // Tell App the animation is done so Navbar + content can show
+    if (onAnimationComplete) {
+      onAnimationComplete();
+    }
+  }, [onAnimationComplete]);
 
-    // Animation: Wait for 10 seconds, then animate the block to its original position
-    gsap.to(hero.current, {
-      y: 0, // Move to original Y position
-      opacity: 1, // Fade in
-      duration: 1, // Animation duration
-      delay: 10, // Wait for 10 seconds before starting
-      ease: "power2.out", // Smooth easing
-      zIndex: 10, // Use zIndex instead of z
-    });
-  }, []);
-  useGSAP(() => {
-    // Initial state: Hide the block and move it above the viewport
-    gsap.set(btnRef.current, { y: -100, opacity: 0 });
-
-    // Animation: Wait for 10 seconds, then animate the block to its original position
-    gsap.to(btnRef.current, {
-      y: 0, // Move to original Y position
-      opacity: 1, // Fade in
-      duration: 1, // Animation duration
-      delay: 10, // Wait for 10 seconds before starting
-      ease: "power2.out", // Smooth easing
-      zIndex: 10, // Use zIndex instead of z
-    });
+  // Set initial hidden state for hero text and button
+  useEffect(() => {
+    if (hero.current) {
+      gsap.set(hero.current, {
+        y: -100,
+        opacity: 0,
+        visibility: "hidden",
+        pointerEvents: "none",
+      });
+    }
+    if (btnRef.current) {
+      gsap.set(btnRef.current, {
+        y: -100,
+        opacity: 0,
+        visibility: "hidden",
+        pointerEvents: "none",
+      });
+    }
   }, []);
 
   const sizes = calculateSizes(isSmall, isMobile, isTablet);
@@ -80,7 +115,11 @@ const Hero = () => {
       <div className="w-full h-full absolute inset-0 mb-6">
         <Canvas>
           <Suspense fallback={<CanvasLoader />}>
-            <CameraAnimation orbitControlsRef={orbitControlsRef} />
+            <LoadingTracker onModelsLoaded={() => setModelsLoaded(true)} />
+            <CameraAnimation
+              orbitControlsRef={orbitControlsRef}
+              onComplete={handleCameraAnimationDone}
+            />
 
             {/* Use OrbitControls as the default controller */}
             <OrbitControls
@@ -103,12 +142,7 @@ const Hero = () => {
             />
             <FliyingAstronaut scale={4} position={[0, -10, 0]} />
             <group>
-              <Target
-                scale={1.5}
-                position={sizes.targetPosition}
-                rotation={[0, Math.PI / 5, 0]}
-              />
-              <ReactLogo position={sizes.reactLogoPosition} />
+<ReactLogo position={sizes.reactLogoPosition} />
               <Cube position={sizes.cubePosition} />
               <Rings position={sizes.ringPosition} />
             </group>

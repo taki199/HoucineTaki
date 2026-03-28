@@ -5,10 +5,11 @@ import Globe from "react-globe.gl";
 import * as THREE from "three";
 import Button from "../components/Button";
 
+gsap.registerPlugin(ScrollTrigger);
+
 const About = () => {
   const globeEl = useRef();
   const [hasCopied, setHasCopied] = useState(false);
-  gsap.registerPlugin(ScrollTrigger);
 
   const aboutRef = useRef(null);
   useEffect(() => {
@@ -44,20 +45,17 @@ const About = () => {
 
   useEffect(() => {
     const globe = globeEl.current;
-    setHasCopied(true);
-
-    setTimeout(() => {
-      setHasCopied(false);
-    }, 2000);
+    if (!globe) return;
 
     // Auto-rotate
     globe.controls().autoRotate = true;
     globe.controls().autoRotateSpeed = 0.35;
 
     // Add clouds sphere
-    const CLOUDS_IMG_URL = "/assets/clouds.png"; // from https://github.com/turban/webgl-earth
+    const CLOUDS_IMG_URL = "/assets/clouds.png";
     const CLOUDS_ALT = 0.004;
     const CLOUDS_ROTATION_SPEED = -0.006; // deg/frame
+    let animationId;
 
     new THREE.TextureLoader().load(CLOUDS_IMG_URL, (cloudsTexture) => {
       const clouds = new THREE.Mesh(
@@ -72,9 +70,13 @@ const About = () => {
 
       (function rotateClouds() {
         clouds.rotation.y += (CLOUDS_ROTATION_SPEED * Math.PI) / 180;
-        requestAnimationFrame(rotateClouds);
+        animationId = requestAnimationFrame(rotateClouds);
       })();
     });
+
+    return () => {
+      if (animationId) cancelAnimationFrame(animationId);
+    };
   }, []);
   return (
     <section className="c-space my-20" id="about" ref={aboutRef}>

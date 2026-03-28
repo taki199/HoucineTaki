@@ -3,10 +3,10 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef, useState } from "react";
 
+gsap.registerPlugin(ScrollTrigger);
+
 const Contact = () => {
   const formRef = useRef();
-
-  gsap.registerPlugin(ScrollTrigger);
   const contactRef = useRef(null);
   useEffect(() => {
     const element = contactRef.current;

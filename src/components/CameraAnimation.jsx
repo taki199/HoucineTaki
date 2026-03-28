@@ -1,49 +1,51 @@
 import { useThree } from "@react-three/fiber";
 import { gsap } from "gsap";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
-const CameraAnimation = ({ orbitControlsRef }) => {
+const CameraAnimation = ({ orbitControlsRef, onComplete }) => {
   const { camera } = useThree();
+  const calledRef = useRef(false);
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
 
   useEffect(() => {
-    // Save the camera's initial position (default position)
-    const initialPosition = {
-      x: 0, // Default X position (center of the scene)
-      y: 0, // Default Y position (center of the scene)
-      z: 28, // Default Z position (front of the scene)
-    };
+    const initialPosition = { x: 0, y: 0, z: 28 };
 
-    // Set the camera's starting position (viewing from far away)
-    camera.position.set(100, 50, -100); // Move the camera far away
-    camera.lookAt(0, 0, 0); // Make the camera look at the center of the scene
-    camera.updateProjectionMatrix(); // Update the camera's projection matrix
+    camera.position.set(100, 50, -100);
+    camera.lookAt(0, 0, 0);
+    camera.updateProjectionMatrix();
 
-    // Animation timeline
-    const timeline = gsap.timeline();
+    const timeline = gsap.timeline({ repeat: 0 });
 
-    // Step 1: Move the camera to the default position (front of the scene)
     timeline.to(
       camera.position,
       {
-        x: initialPosition.x, // Move to the center of the scene
-        y: initialPosition.y, // Move to the center of the scene
-        z: initialPosition.z, // Move to the front of the scene
-        duration: 10, // Animation duration in seconds
-        ease: "power2.inOut", // Smooth easing
+        x: initialPosition.x,
+        y: initialPosition.y,
+        z: initialPosition.z,
+        duration: 10,
+        ease: "power2.inOut",
         onUpdate: () => {
-          camera.lookAt(0, 0, 0); // Keep the camera looking at the center of the scene
-          camera.updateProjectionMatrix(); // Update the camera's projection matrix during the animation
+          camera.lookAt(0, 0, 0);
+          camera.updateProjectionMatrix();
         },
         onComplete: () => {
-          // Enable OrbitControls after the animation ends
           if (orbitControlsRef.current) {
             orbitControlsRef.current.enabled = true;
           }
+          if (!calledRef.current) {
+            calledRef.current = true;
+            onCompleteRef.current?.();
+          }
         },
       },
-      "0" // Start the animation immediately
+      "0"
     );
-  }, [camera, orbitControlsRef]);
+
+    return () => timeline.kill();
+    // Only run once on mount — refs keep callbacks fresh
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return null;
 };

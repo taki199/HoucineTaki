@@ -7,6 +7,7 @@ const RealTerminal = () => {
   const terminalRef = useRef(null);
   const xterm = useRef(null);
   const fitAddon = useRef(new FitAddon());
+  const commandBufferRef = useRef("");
 
   // Command handling logic
   const handleCommand = useCallback((cmd, term) => {
@@ -48,6 +49,8 @@ const RealTerminal = () => {
 
   // Initialize terminal
   useEffect(() => {
+    if (!terminalRef.current) return;
+
     const term = new Terminal({
       cursorBlink: true,
       theme: {
@@ -63,49 +66,64 @@ const RealTerminal = () => {
     xterm.current = term;
     term.loadAddon(fitAddon.current);
 
-    if (terminalRef.current) {
-      term.open(terminalRef.current);
-      fitAddon.current.fit();
-
-      // Initial setup
-      term.writeln("Welcome to Interactive Portfolio Terminal");
-      term.writeln('Type "help" for available commands\r\n');
-      term.write("$ ");
-
-      // Command buffer
-      let commandBuffer = "";
-
-      // Input handling
-      term.onKey(({ key, domEvent }) => {
-        if (domEvent.key === "Enter") {
-          term.writeln("");
-          handleCommand(commandBuffer.trim(), term);
-          commandBuffer = "";
-          term.write("$ ");
-        } else if (domEvent.key === "Backspace") {
-          if (commandBuffer.length > 0) {
-            commandBuffer = commandBuffer.slice(0, -1);
-            term.write("\b \b");
-          }
-        } else if (key.length === 1) {
-          commandBuffer += key;
-          term.write(key);
+    term.open(terminalRef.current);
+    
+    // Wait for terminal to be fully initialized before fitting
+    setTimeout(() => {
+      try {
+        if (fitAddon.current && terminalRef.current) {
+          fitAddon.current.fit();
         }
-      });
+      } catch (error) {
+        console.warn("Error fitting terminal:", error);
+      }
+    }, 0);
 
-      // Responsive handling
-      const resizeObserver = new ResizeObserver(() => {
-        fitAddon.current.fit();
-        term.scrollToBottom();
-      });
+    // Initial setup
+    term.writeln("Welcome to Interactive Portfolio Terminal");
+    term.writeln('Type "help" for available commands\r\n');
+    term.write("$ ");
 
-      resizeObserver.observe(terminalRef.current);
+    // Input handling
+    term.onKey(({ key, domEvent }) => {
+      if (domEvent.key === "Enter") {
+        term.writeln("");
+        handleCommand(commandBufferRef.current.trim(), term);
+        commandBufferRef.current = "";
+        term.write("$ ");
+      } else if (domEvent.key === "Backspace") {
+        if (commandBufferRef.current.length > 0) {
+          commandBufferRef.current = commandBufferRef.current.slice(0, -1);
+          term.write("\b \b");
+        }
+      } else if (key.length === 1) {
+        commandBufferRef.current += key;
+        term.write(key);
+      }
+    });
 
-      return () => {
-        resizeObserver.disconnect();
+    // Responsive handling
+    const resizeObserver = new ResizeObserver(() => {
+      try {
+        if (fitAddon.current && terminalRef.current) {
+          fitAddon.current.fit();
+          if (term && typeof term.scrollToBottom === 'function') {
+            term.scrollToBottom();
+          }
+        }
+      } catch (error) {
+        console.warn("Error resizing terminal:", error);
+      }
+    });
+
+    resizeObserver.observe(terminalRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+      if (term) {
         term.dispose();
-      };
-    }
+      }
+    };
   }, [handleCommand]);
 
   return (
@@ -127,7 +145,15 @@ const RealTerminal = () => {
               <span
                 key={cmd}
                 className="px-3 py-1 bg-gray-700 rounded-lg text-sm cursor-pointer hover:bg-gray-600"
-                onClick={() => xterm.current?.simulateCommand(cmd)}
+                onClick={() => {
+                  const term = xterm.current;
+                  if (!term) return;
+                  term.write(cmd);
+                  term.writeln("");
+                  handleCommand(cmd, term);
+                  commandBufferRef.current = "";
+                  term.write("$ ");
+                }}
               >
                 {cmd}
               </span>
